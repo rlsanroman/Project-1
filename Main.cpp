@@ -5,6 +5,6 @@ using namespace std;
 
 int main()
 {
-	cout << " i added this line!" << endl;
+	cout << " i changed this line!" << endl;
 	cout << "This is another commit!" << endl;
 }
