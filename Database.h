@@ -6,6 +6,22 @@
 
 using namespace std;
 
+class duplicateEntry: public exception
+{
+  virtual const char* what() const throw()
+  {
+    return "Entry already exists in Database";
+  }
+};
+
+class noEntry: public exception
+{
+  virtual const char* what() const throw()
+  {
+    return "Entry does not exist in Database";
+  }
+};
+
 class Database
 {
 private:
@@ -16,7 +32,7 @@ public:
 	void addTable(Table& t, string name);
 	void dropTable(string name);
 	vector<string> listTables();
-	map<string,Table> getTables();
+	map<string,Table> getTables() { return tables; }
 
 };
 
