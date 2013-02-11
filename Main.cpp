@@ -5,6 +5,5 @@ using namespace std;
 
 int main()
 {
-	cout << " i changed this line!" << endl;
-	cout << "This is another commit!" << endl;
+	cout << "This is the main function!" << endl;
 }
