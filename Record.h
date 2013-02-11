@@ -11,8 +11,8 @@ class Record
 private:
 	vector<string> tuples;
 public:
-	Record();
-	Record(vector<string> data);
+	Record() {}
+	Record(vector<string> data) : tuples(data) {}
 	
 	string getTuple(int index);
 	void setTuple(int index, string newdata);

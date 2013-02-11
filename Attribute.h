@@ -11,14 +11,14 @@ private:
 	string name;
 	char type;
 public:
-	Attribute();
-	Attribute(string name, char type);
+	Attribute() {}
+	Attribute(string n, char t) : name(n), type(t) {}
 	
-	string getName();
-	char getType();
+	string getName() { return name; }
+	char getType() { return type; }
 	
-	void setName(string name);
-	void setType(char type);	
+	void setName(string n) { name = n; }
+	void setType(char t) { type = t; }
 };
 
 #endif

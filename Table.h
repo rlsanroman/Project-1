@@ -11,6 +11,15 @@ private:
 	vector<Attribute> attributes;
 	vector<Record> records;
 public:
+
+	class noEntry: public exception
+	{
+		virtual const char* what() const throw()
+		{
+		return "Entry does not exist in Table";
+		}
+	};
+
 	Table();
 	Table(vector<Attribute> a);
 

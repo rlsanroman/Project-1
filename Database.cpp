@@ -1,5 +1,10 @@
 #include "Database.h"
 
+Database::Database()
+{
+
+}
+
 void Database::addTable(Table& t, string name)
 {
 	if (tables.find(name) != tables.end())
