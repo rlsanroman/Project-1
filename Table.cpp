@@ -60,17 +60,97 @@ void Table::crossJoin(const Table& t1, const Table& t2)
 }
 int Table::sum(string name)
 {
-
+	int sum = 0;
+	bool found = false;
+	for (int i=0; i<attributes.size(); i++)
+	{
+		if ( name == attributes[i].getName() )
+		{	
+			found = true;
+			for (int j = 0; j<records.size(); j++)
+			{
+				sum += atoi(records[j].getTuple(i).c_str());
+			}
+			return sum;
+		}
+	}
+	if (!found)
+	{
+		throw noEntry();
+	}
 }
 unsigned int Table::count(string name)
 {
-
+	bool found = false;
+	unsigned int count = 0;
+	for (int i=0; i<attributes.size(); i++)
+	{
+		if ( name == attributes[i].getName() )
+		{
+			found = true;
+			for (int j=0; j<records.size(); j++)
+			{
+				//count only non-empty values
+				if (records[j].getTuple(i) != "")	
+				{
+					count++;
+				}
+			}
+			return count;
+		}
+	}
+	if (!found)
+	{
+		throw noEntry();
+	}
 }
-int Table::min (string name)
+int Table::min (string name) 
 {
-
+	bool found = false;
+	int min = 0;
+	for (int i=0; i<attributes.size(); i++)
+	{
+		if ( name == attributes[i].getName() )
+		{
+			found = true;
+			min = atoi(records[i].getTuple(0).c_str());
+			for (int j=0; j<records.size(); j++)
+			{
+				if (atoi(records[j].getTuple(i).c_str()) < min)
+				{
+					min = atoi(records[j].getTuple(i).c_str());
+				}
+			}
+			return min;
+		}
+	}
+	if (!found)
+	{
+		throw noEntry();
+	}
 }
 int Table::max (string name)
 {
-
+	bool found = false;
+	int max = 0;
+	for (int i=0; i<attributes.size(); i++)
+	{
+		if ( name == attributes[i].getName() )
+		{
+			found = true;
+			max = atoi(records[i].getTuple(0).c_str());
+			for (int j=0; j<records.size(); j++)
+			{
+				if (atoi(records[j].getTuple(i).c_str()) > max)
+				{
+					max = atoi(records[j].getTuple(i).c_str());
+				}
+			}
+			return max;
+		}
+	}
+	if (!found)
+	{
+		throw noEntry();
+	}
 }
