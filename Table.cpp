@@ -56,7 +56,12 @@ void Table::renameAttribute(string oldname, string newname)
 }
 void Table::crossJoin(const Table& t1, const Table& t2)
 {
+	attributes = t1.getAttributes();
 
+	for(int i = 0; i < t1.getSize(); i++)
+	{
+		records.push_back(t1.getRecord(i));
+	}
 }
 int Table::sum(string name)
 {

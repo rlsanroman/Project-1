@@ -28,8 +28,9 @@ public:
 	void deleteColumn(string name);
 	void insertRecord(Record r);
 
-	vector<Attribute> getAttributes() { return attributes; }
-	int getSize() { return records.size(); }
+	vector<Attribute> getAttributes() const { return attributes; }
+	int getSize() const { return records.size(); }
+	Record getRecord(int index) const { return records[i]; } // added this function to get record
 
 
 	void renameAttribute(string oldname, string newname);
