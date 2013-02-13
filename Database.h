@@ -1,3 +1,9 @@
+#ifdef DBDLL_EXPORTS
+#define DBLL_API __declspec(dllexport)
+#else
+#define DBDLL_API __declspec(dllimport)
+#endif
+
 #ifndef DATABASE_H_
 #define DATABASE_H_
 
