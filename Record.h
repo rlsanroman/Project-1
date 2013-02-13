@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class Record
+class __declspec(dllexport) Record
 {
 private:
 	vector<string> tuples;

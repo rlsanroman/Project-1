@@ -6,7 +6,7 @@
 
 #include "Attribute.h"
 
-class Table
+class __declspec(dllexport) Table
 {
 private:
 	vector<Attribute> attributes;
@@ -30,7 +30,7 @@ public:
 
 	vector<Attribute> getAttributes() const { return attributes; }
 	int getSize() const { return records.size(); }
-	Record getRecord(int index) const { return records[i]; } // added this function to get record
+	Record getRecord(int index) const { return records[index]; } // added this function to get record
 
 
 	void renameAttribute(string oldname, string newname);

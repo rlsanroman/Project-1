@@ -1,9 +1,3 @@
-#ifdef DBDLL_EXPORTS
-#define DBLL_API __declspec(dllexport)
-#else
-#define DBDLL_API __declspec(dllimport)
-#endif
-
 #ifndef DATABASE_H_
 #define DATABASE_H_
 
@@ -12,15 +6,15 @@
 
 using namespace std;
 
-class duplicateEntry: public exception
+class __declspec(dllexport) duplicateEntry: public exception
 {
-  virtual const char* what() const throw()
+	virtual const char* what() const throw()
   {
     return "Entry already exists in Database";
   }
 };
 
-class noEntry: public exception
+class __declspec(dllexport) noEntry:  public exception
 {
   virtual const char* what() const throw()
   {
@@ -28,7 +22,8 @@ class noEntry: public exception
   }
 };
 
-class Database
+
+class __declspec(dllexport) Database
 {
 private:
 	map<string,Table> tables;

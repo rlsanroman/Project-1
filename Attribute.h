@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class Attribute
+class __declspec(dllexport) Attribute
 {
 private:
 	string name;
