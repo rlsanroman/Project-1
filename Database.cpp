@@ -30,3 +30,13 @@ vector<string> Database::listTables()
 
 	return names;
 }
+
+Table* Database::Query(vector<string> strSelect, string strWhere, string strFrom) const
+{
+	return NULL;
+}
+	
+bool Database::Delete(vector<string> strSelect, string strWhere, string strFrom)
+{
+	return true;
+}
