@@ -6,6 +6,6 @@ using namespace std;
 int main()
 {
 	char ch;
-	cout << "This is the main function!" << endl;
+	cout << "This is the ultimate test, MUAHAHAHAHAHA!" << endl;
 	cin >> ch;
 }
