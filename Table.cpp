@@ -1,9 +1,11 @@
 #include "Table.h"
+#include <stdlib.h>
 
 Table::Table()
 {
 
 }
+
 Table::Table(vector<Attribute> a)
 {
 	attributes = a;
@@ -63,6 +65,7 @@ void Table::crossJoin(const Table& t1, const Table& t2)
 		records.push_back(t1.getRecord(i));
 	}
 }
+
 int Table::sum(string name)
 {
 	int sum = 0;
@@ -84,6 +87,7 @@ int Table::sum(string name)
 		throw noEntry();
 	}
 }
+
 unsigned int Table::count(string name)
 {
 	bool found = false;
@@ -109,6 +113,7 @@ unsigned int Table::count(string name)
 		throw noEntry();
 	}
 }
+
 int Table::min (string name) 
 {
 	bool found = false;
@@ -134,6 +139,7 @@ int Table::min (string name)
 		throw noEntry();
 	}
 }
+
 int Table::max (string name)
 {
 	bool found = false;
