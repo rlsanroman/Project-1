@@ -28,7 +28,7 @@ public:
 	void insertRecord(Record r);
 
 	vector<Attribute> getAttributes() const { return attributes; }
-	int getSize() const { return records.size(); }
+	unsigned long getSize() const { return records.size(); }
 	Record getRecord(int index) const { return records[index]; } // added this function to get record
 
 
