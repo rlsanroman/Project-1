@@ -12,11 +12,11 @@ private:
 	vector<Record> records;
 public:
 
-	class noEntry: public exception
+	class noEntryTable: public exception
 	{
 		virtual const char* what() const throw()
 		{
-		return "Entry does not exist in Table";
+			return "Entry does not exist in Table";
 		}
 	};
 
@@ -33,7 +33,7 @@ public:
 
 
 	void renameAttribute(string oldname, string newname);
-	void crossJoin(const Table& t1, const Table& t2);
+	Table crossJoin(const Table& t1, const Table& t2);
 	int sum(string name);
 	unsigned int count(string name);
 	int min (string name);

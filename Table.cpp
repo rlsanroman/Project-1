@@ -29,9 +29,10 @@ void Table::deleteColumn(string name)
 		}
 	}
 	if (!found)
-		throw noEntry();
+		throw noEntryTable();
 
 }
+
 void Table::insertRecord(Record r)
 {
 	records.push_back(r);
@@ -53,17 +54,30 @@ void Table::renameAttribute(string oldname, string newname)
 	}
 	if (!found)
 	{
-		throw noEntry();
+		throw noEntryTable();
 	}
 }
-void Table::crossJoin(const Table& t1, const Table& t2)
-{
-	attributes = t1.getAttributes();
 
-	for(int i = 0; i < t1.getSize(); i++)
-	{
-		records.push_back(t1.getRecord(i));
+Table Table::crossJoin(const Table& t1, const Table& t2)
+{
+	vector<Attribute> combo(t1.getAttributes());
+	
+	// Join attributes
+	for(vector<Attribute>::const_iterator it = t2.attributes.begin(); it != t2.attributes.end(); ++it) {
+		combo.push_back(*it);
 	}
+	
+	Table fusion = *new Table(combo);
+
+	for(vector<Record>::const_iterator it1 = t1.records.begin(); it1 != t1.records.end(); ++it1) {
+		for(vector<Record>::const_iterator it2 = t2.records.begin(); it2 != t2.records.end(); ++it2) {
+			Record add = Record(it1->tuples);
+			add.tuples.insert(add.tuples.end(), it2->tuples.begin(), it2->tuples.end());
+			fusion.insertRecord(add);
+		}
+	}
+	
+	return fusion;
 }
 
 int Table::sum(string name)
@@ -84,7 +98,7 @@ int Table::sum(string name)
 	}
 	if (!found)
 	{
-		throw noEntry();
+		throw noEntryTable();
 	}
 }
 
@@ -110,7 +124,7 @@ unsigned int Table::count(string name)
 	}
 	if (!found)
 	{
-		throw noEntry();
+		throw noEntryTable();
 	}
 }
 
@@ -136,7 +150,7 @@ int Table::min (string name)
 	}
 	if (!found)
 	{
-		throw noEntry();
+		throw noEntryTable();
 	}
 }
 
@@ -162,6 +176,6 @@ int Table::max (string name)
 	}
 	if (!found)
 	{
-		throw noEntry();
+		throw noEntryTable();
 	}
 }

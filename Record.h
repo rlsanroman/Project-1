@@ -16,6 +16,8 @@ public:
 	
 	string getTuple(int index);
 	void setTuple(int index, string newdata);
+	
+	friend class Table;
 };
 
 #endif
