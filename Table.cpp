@@ -38,8 +38,6 @@ void Table::insertRecord(Record r)
 	records.push_back(r);
 }
 
-
-
 void Table::renameAttribute(string oldname, string newname)
 {
 	bool found = false;
@@ -67,17 +65,17 @@ Table Table::crossJoin(const Table& t1, const Table& t2)
 		combo.push_back(*it);
 	}
 	
-	Table fusion = *new Table(combo);
+	Table* fusion = new Table(combo);
 
 	for(vector<Record>::const_iterator it1 = t1.records.begin(); it1 != t1.records.end(); ++it1) {
 		for(vector<Record>::const_iterator it2 = t2.records.begin(); it2 != t2.records.end(); ++it2) {
 			Record add = Record(it1->tuples);
 			add.tuples.insert(add.tuples.end(), it2->tuples.begin(), it2->tuples.end());
-			fusion.insertRecord(add);
+			fusion->insertRecord(add);
 		}
 	}
 	
-	return fusion;
+	return *fusion;
 }
 
 int Table::sum(string name)
