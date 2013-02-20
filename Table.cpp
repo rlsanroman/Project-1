@@ -1,15 +1,9 @@
 #include "Table.h"
 #include <stdlib.h>
 
-Table::Table()
-{
+Table::Table() { }
 
-}
-
-Table::Table(vector<Attribute> a)
-{
-	attributes = a;
-}
+Table::Table(vector<Attribute> a) : attributes(a) { }
 
 void Table::addColumn(Attribute att)
 {
@@ -81,12 +75,10 @@ Table Table::crossJoin(const Table& t1, const Table& t2)
 int Table::sum(string name)
 {
 	int sum = 0;
-	bool found = false;
 	for (int i=0; i<attributes.size(); i++)
 	{
 		if ( name == attributes[i].getName() )
 		{	
-			found = true;
 			for (int j = 0; j<records.size(); j++)
 			{
 				sum += atoi(records[j].getTuple(i).c_str());
@@ -94,21 +86,16 @@ int Table::sum(string name)
 			return sum;
 		}
 	}
-	if (!found)
-	{
-		throw noEntryTable();
-	}
+	throw noEntryTable();
 }
 
 unsigned int Table::count(string name)
 {
-	bool found = false;
 	unsigned int count = 0;
 	for (int i=0; i<attributes.size(); i++)
 	{
 		if ( name == attributes[i].getName() )
 		{
-			found = true;
 			for (int j=0; j<records.size(); j++)
 			{
 				//count only non-empty values
@@ -120,21 +107,16 @@ unsigned int Table::count(string name)
 			return count;
 		}
 	}
-	if (!found)
-	{
-		throw noEntryTable();
-	}
+	throw noEntryTable();
 }
 
 int Table::min (string name) 
 {
-	bool found = false;
 	int min = 0;
 	for (int i=0; i<attributes.size(); i++)
 	{
 		if ( name == attributes[i].getName() )
 		{
-			found = true;
 			min = atoi(records[i].getTuple(0).c_str());
 			for (int j=0; j<records.size(); j++)
 			{
@@ -146,21 +128,16 @@ int Table::min (string name)
 			return min;
 		}
 	}
-	if (!found)
-	{
-		throw noEntryTable();
-	}
+	throw noEntryTable();
 }
 
 int Table::max (string name)
 {
-	bool found = false;
 	int max = 0;
 	for (int i=0; i<attributes.size(); i++)
 	{
 		if ( name == attributes[i].getName() )
 		{
-			found = true;
 			max = atoi(records[i].getTuple(0).c_str());
 			for (int j=0; j<records.size(); j++)
 			{
@@ -172,8 +149,5 @@ int Table::max (string name)
 			return max;
 		}
 	}
-	if (!found)
-	{
-		throw noEntryTable();
-	}
+	throw noEntryTable();
 }
