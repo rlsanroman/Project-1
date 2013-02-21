@@ -24,7 +24,6 @@ void Table::deleteColumn(string name)
 	}
 	if (!found)
 		throw noEntryTable();
-
 }
 
 void Table::insertRecord(Record r)
@@ -44,6 +43,7 @@ void Table::renameAttribute(string oldname, string newname)
 			break;
 		}
 	}
+
 	if (!found)
 	{
 		throw noEntryTable();
@@ -68,7 +68,7 @@ Table Table::crossJoin(const Table& t1, const Table& t2)
 			fusion->insertRecord(add);
 		}
 	}
-	
+
 	return *fusion;
 }
 
