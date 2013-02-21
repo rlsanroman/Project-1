@@ -54,7 +54,8 @@ int main()
 	database.addTable(table,"Group14");
 
 	database.printTable(table);
-	Table* t = database.Query("First","Age=21","Group14");
+	cout << endl << endl;
+	Table* t = database.Query("*","Age>=21","Group14");
 	database.addTable(*t,"Query");
 	database.printTable(*t);
 	cin >> ch;
