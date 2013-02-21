@@ -50,7 +50,7 @@ void Table::renameAttribute(string oldname, string newname)
 	}
 }
 
-Table Table::crossJoin(const Table& t1, const Table& t2)
+Table static Table::crossJoin(const Table& t1, const Table& t2)
 {
 	vector<Attribute> combo(t1.getAttributes());
 	

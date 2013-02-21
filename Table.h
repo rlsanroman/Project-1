@@ -33,7 +33,7 @@ public:
 
 
 	void renameAttribute(string oldname, string newname);
-	Table crossJoin(const Table& t1, const Table& t2);
+	Table static crossJoin(const Table& t1, const Table& t2);
 	int sum(string name);
 	unsigned int count(string name);
 	int min (string name);
