@@ -34,8 +34,8 @@ public:
 	void dropTable(string name);
 	vector<string> listTables();
 	map<string,Table> getTables() { return tables; }
-	Table* Query(vector<string> strSelect, string strWhere, string strFrom);
-	bool Delete(vector<string> strSelect, string strWhere, string strFrom); 
+	Table* Query(string strSelect, string strWhere, string strFrom);
+	bool Delete(string strSelect, string strWhere, string strFrom); 
 	void printTable(Table table); //debugging function
 
 private:

@@ -54,8 +54,8 @@ int main()
 	database.addTable(table,"Group14");
 
 	database.printTable(table);
-	vector<string> select;
-	select.push_back("First");
-	Table* t = database.Query(select,"Age<21","Group14");
+	Table* t = database.Query("First","Age=21","Group14");
+	database.addTable(*t,"Query");
+	database.printTable(*t);
 	cin >> ch;
 }
