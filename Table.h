@@ -41,7 +41,8 @@ private:
 	
 	string getToken(string& str);
 	boolTree* makeTree(string& cond);
-	bool checkEntry(Record* r);
+	bool checkEntry(boolTree* conditions, Record* r);
+	unsigned long getIndex(const string& ref);
 	
 public:
 
