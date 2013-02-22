@@ -11,9 +11,14 @@ private:
 	vector<Attribute> attributes;
 	vector<Record> records;
 	
-	vector<Record> checkAgainst(const string& cond);
-public:
-
+	class improperSyntax: public exception
+	{
+		virtual const char* what() const throw()
+		{
+			return "Improper Query Syntax";
+		}
+	};
+	
 	class noEntryTable: public exception
 	{
 		virtual const char* what() const throw()
@@ -21,6 +26,24 @@ public:
 			return "Entry does not exist in Table";
 		}
 	};
+	
+	struct boolTree {
+	public:
+		string value;
+		bool isBoolean, negated;
+		boolTree *left, *right;
+		
+		boolTree(): negated(false) {}
+		boolTree(bool isB): isBoolean(isB), negated(false) {}
+		boolTree(string value): value(value), isBoolean(false), negated(false) {}
+		boolTree(string value, boolTree* l, boolTree* r): value(value), isBoolean(false), left(l), right(r), negated(false) {}
+	};
+	
+	string getToken(string& str);
+	boolTree* makeTree(string& cond);
+	bool checkEntry(Record* r);
+	
+public:
 
 	Table();
 	Table(vector<Attribute> a);
@@ -41,6 +64,7 @@ public:
 	int min (string name);
 	int max (string name);
 	
+	vector<Record*> checkAgainst(string cond);
 	friend class Database;
 };
 

@@ -10,3 +10,7 @@ void Record::setTuple(int index, string newdata)
 {
 	tuples[index] = newdata;
 }
+
+bool satisfies(const string& cond){
+	
+}

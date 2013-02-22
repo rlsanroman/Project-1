@@ -152,3 +152,155 @@ int Table::max (string name)
 	}
 	throw noEntryTable();
 }
+
+string Table::getToken(string& str) {
+	if (str.size() == 0)
+		return "";
+	
+	string ret;
+	
+	switch (str[0]) {
+		case '(':
+			ret = "(";
+			break;
+		case ')':
+			ret = ")";
+			break;
+		case '=':
+			if (str[1] == '=')
+				ret = "==";
+			else
+				throw improperSyntax();
+			break;
+		case '!':
+			if (str[1] == '=')
+				ret = "!=";
+			else
+				throw improperSyntax();
+			break;
+		case '<':
+			if (str[1] == '=')
+				ret = "<=";
+			else
+				ret = "<";
+			break;
+		case '>':
+			if (str[1] == '=')
+				ret = ">=";
+			else
+				ret = ">";
+			break;
+		case '&':
+			if (str[1] == '&')
+				ret = "&&";
+			else
+				throw improperSyntax();
+			break;
+		case '|':
+			if (str[1] == '|')
+				ret = "||";
+			else
+				throw improperSyntax();
+			break;
+		default:
+			unsigned long index = str.find_first_of("()=!<>&|");
+			ret = str.substr(0,index);
+			if(ret[ret.size()-1] == ' ')
+				ret.pop_back();
+			break;
+	}
+	
+	str.erase(0,ret.size() + (str[ret.size()] == ' '));
+	
+	return ret;
+}
+
+Table::boolTree* Table::makeTree(string& cond){
+	boolTree* tree = new boolTree(true);
+	bool negate = false;
+	
+	// negate if necessary
+	if (cond[0] == '!' && cond[1] == '('){
+		negate = true;
+		cond.erase(0,1);
+	}
+		
+	// left side of possible boolean operation
+	string token = getToken(cond);
+	if (token == ")" || token == "==" || token == "!=" || token == ">" || token == ">=" ||
+		token == "<" || token == "<=" || token == "&&" || token == "||")
+		throw improperSyntax();
+	else if (token == "(") {
+		tree->left = makeTree(cond);
+		if (negate) {
+			tree->left->negated = true;
+			negate = false;
+		}
+		
+		if(getToken(cond) != ")")
+			throw improperSyntax();
+	}
+	else {
+		// THIS ASSUMES GOOD SYNTAX
+		tree->left = new boolTree(getToken(cond));
+		tree->left->left = new boolTree(token);
+		tree->left->right = new boolTree(getToken(cond));
+	}
+	
+	token = getToken(cond);
+	// if this has no boolean operator
+	if (token == ")" || token == "") {
+		cond = token + cond;
+		return tree->left;
+	}
+	
+	// get actual value
+	if (token != "&&" && token != "||")
+		throw improperSyntax();
+	else {
+		tree->value = token;
+	}
+	
+	if (cond[0] == '!' && cond[1] == '('){
+		negate = true;
+		cond.erase(0,1);
+	}
+	
+	// right side
+	token = getToken(cond);
+	if (token == ")" || token == "==" || token == "!=" || token == ">" || token == ">=" || token == "<" || token == "<=" || token == "&&" || token == "||")
+		throw improperSyntax();
+	else if (token == "(") {
+		tree->right = makeTree(cond);
+		if (negate) {
+			tree->right->negated = true;
+			negate = false;
+		}
+		
+		if(getToken(cond) != ")")
+			throw improperSyntax();
+	}
+	else {
+		// THIS ASSUMES GOOD SYNTAX
+		tree->right = new boolTree(getToken(cond));
+		tree->right->left = new boolTree(token);
+		tree->right->right = new boolTree(getToken(cond));
+	}
+	
+	return tree;
+}
+
+bool Table::checkEntry(Record* r) {
+	
+}
+
+vector<Record*> Table::checkAgainst(string cond){
+	vector<Record*> ret;
+	boolTree* conditions = makeTree(cond);
+	
+	for(vector<Record>::iterator it = records.begin(); it != records.end(); ++it) {
+		
+	}
+	
+	return ret;
+}
