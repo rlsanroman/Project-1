@@ -83,6 +83,15 @@ Table Table::crossJoin(const Table& t1, const Table& t2)
 	return *fusion;
 }
 
+unsigned long Table::getIndex(const string& ref) {
+	for (int i=0; i<attributes.size(); i++) {
+		if (attributes[i].getName() == ref) {
+			return i;
+		}
+	}
+	throw noEntryTable();
+}
+
 int Table::sum(string name)
 {
 	int sum = 0;
@@ -300,16 +309,122 @@ Table::boolTree* Table::makeTree(string& cond){
 	return tree;
 }
 
-bool Table::checkEntry(Record* r) {
-
+bool Table::checkEntry(boolTree* conditions, Record* r) {
+	bool ret = false;
+	
+	if (conditions->isBoolean) {
+		bool left = checkEntry(conditions->left, r);
+		bool right = checkEntry(conditions->right, r);
+		if(conditions->value == "&&")
+			ret = left && right;
+		else
+			ret = left || right;
+	}
+	else {
+		unsigned long index = getIndex(conditions->left->value);
+		string left = r->tuples[index];
+		char type = attributes[index].getType();
+		if (conditions->value == "==") {
+			switch (type) {
+				case 's':
+					return left == conditions->right->value;
+					break;
+				case 'i':
+					return atoi(left.c_str()) == atoi(conditions->right->value.c_str());
+					break;
+				case 'f':
+					return atof(left.c_str()) == atof(conditions->right->value.c_str());
+					break;
+				case 'd':
+					return false;
+					break;
+			}
+		}
+		if (conditions->value == "!=") {
+			switch (type) {
+				case 's':
+					return left != conditions->right->value;
+					break;
+				case 'i':
+					return atoi(left.c_str()) != atoi(conditions->right->value.c_str());
+					break;
+				case 'f':
+					return atof(left.c_str()) != atof(conditions->right->value.c_str());
+					break;
+				case 'd':
+					return false;
+					break;
+			}
+		}
+		if (type == 's')
+			throw improperSyntax();
+		if (conditions->value == "<=") {
+			switch (type) {
+				case 'i':
+					return atoi(left.c_str()) <= atoi(conditions->right->value.c_str());
+					break;
+				case 'f':
+					return atof(left.c_str()) <= atof(conditions->right->value.c_str());
+					break;
+				case 'd':
+					return false;
+					break;
+			}
+		}
+		if (conditions->value == "<") {
+			switch (type) {
+				case 'i':
+					return atoi(left.c_str()) < atoi(conditions->right->value.c_str());
+					break;
+				case 'f':
+					return atof(left.c_str()) < atof(conditions->right->value.c_str());
+					break;
+				case 'd':
+					return false;
+					break;
+			}
+		}
+		if (conditions->value == ">=") {
+			switch (type) {
+				case 'i':
+					return atoi(left.c_str()) >= atoi(conditions->right->value.c_str());
+					break;
+				case 'f':
+					return atof(left.c_str()) >= atof(conditions->right->value.c_str());
+					break;
+				case 'd':
+					return false;
+					break;
+			}
+		}
+		if (conditions->value == ">") {
+			switch (type) {
+				case 'i':
+					return atoi(left.c_str()) > atoi(conditions->right->value.c_str());
+					break;
+				case 'f':
+					return atof(left.c_str()) > atof(conditions->right->value.c_str());
+					break;
+				case 'd':
+					return false;
+					break;
+			}
+		}
+	}
+	
+	if (conditions->negated)
+		ret = !ret;
+	
+	return ret;
 }
 
 vector<Record*> Table::checkAgainst(string cond){
 	vector<Record*> ret;
 	boolTree* conditions = makeTree(cond);
 	
-	for(vector<Record>::iterator it = records.begin(); it != records.end(); ++it) {
-		
+	for(int i = 0; i < records.size(); ++i) {
+		if(checkEntry(conditions, &records[i]))
+			ret.push_back(&records[i]);
 	}
 	
 	return ret;
