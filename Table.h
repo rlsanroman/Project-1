@@ -39,10 +39,12 @@ private:
 		boolTree(string value, boolTree* l, boolTree* r): value(value), isBoolean(false), left(l), right(r), negated(false) {}
 	};
 	
-	unsigned long convertDate(char* date);
+	unsigned long convertDate(string date);
+	unsigned long getIndex(const string& ref);
 	string getToken(string& str);
 	boolTree* makeTree(string& cond);
-	bool checkEntry(Record* r);
+	bool checkEntry(boolTree* conditions, Record* r);
+	vector<Record*> checkAgainst(string cond);
 	
 public:
 
@@ -65,7 +67,6 @@ public:
 	int min (string name);
 	int max (string name);
 	
-	vector<Record*> checkAgainst(string cond);
 	friend class Database;
 };
 

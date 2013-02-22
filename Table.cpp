@@ -5,7 +5,7 @@ Table::Table() { }
 
 Table::Table(vector<Attribute> a) : attributes(a) { }
 
-unsigned long Table::convertDate(char* date)
+unsigned long Table::convertDate(string date)
 {
 	const int ATOI = 48;  //ascii to integer conversion constant
 	unsigned long days = 10*(date[8]-ATOI)+(date[9]-ATOI);
@@ -336,7 +336,7 @@ bool Table::checkEntry(boolTree* conditions, Record* r) {
 					return atof(left.c_str()) == atof(conditions->right->value.c_str());
 					break;
 				case 'd':
-					return false;
+					return convertDate(left) == convertDate(conditions->right->value);
 					break;
 			}
 		}
@@ -352,7 +352,7 @@ bool Table::checkEntry(boolTree* conditions, Record* r) {
 					return atof(left.c_str()) != atof(conditions->right->value.c_str());
 					break;
 				case 'd':
-					return false;
+					return convertDate(left) != convertDate(conditions->right->value);
 					break;
 			}
 		}
@@ -367,7 +367,7 @@ bool Table::checkEntry(boolTree* conditions, Record* r) {
 					return atof(left.c_str()) <= atof(conditions->right->value.c_str());
 					break;
 				case 'd':
-					return false;
+					return convertDate(left) <= convertDate(conditions->right->value);
 					break;
 			}
 		}
@@ -380,7 +380,7 @@ bool Table::checkEntry(boolTree* conditions, Record* r) {
 					return atof(left.c_str()) < atof(conditions->right->value.c_str());
 					break;
 				case 'd':
-					return false;
+					return convertDate(left) < convertDate(conditions->right->value);
 					break;
 			}
 		}
@@ -393,7 +393,7 @@ bool Table::checkEntry(boolTree* conditions, Record* r) {
 					return atof(left.c_str()) >= atof(conditions->right->value.c_str());
 					break;
 				case 'd':
-					return false;
+					return convertDate(left) >= convertDate(conditions->right->value);
 					break;
 			}
 		}
@@ -406,7 +406,7 @@ bool Table::checkEntry(boolTree* conditions, Record* r) {
 					return atof(left.c_str()) > atof(conditions->right->value.c_str());
 					break;
 				case 'd':
-					return false;
+					return convertDate(left) > convertDate(conditions->right->value);
 					break;
 			}
 		}
