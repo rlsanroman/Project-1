@@ -5,6 +5,16 @@ Table::Table() { }
 
 Table::Table(vector<Attribute> a) : attributes(a) { }
 
+unsigned long Table::convertDate(char* date)
+{
+	const int ATOI = 48;  //ascii to integer conversion constant
+	unsigned long days = 10*(date[8]-ATOI)+(date[9]-ATOI);
+	unsigned long months = 10*(date[5]-ATOI)+(date[6]-ATOI);
+	unsigned long years = 1000*(date[0]-ATOI)+100*(date[1]-ATOI)+10*(date[2]-ATOI)+date[3]-ATOI;
+	days += (31*months+365*years); //uniform conversion to days to easily subtract dates
+	return days;
+}
+
 void Table::addColumn(Attribute att)
 {
 	attributes.push_back(att);
@@ -71,15 +81,6 @@ Table Table::crossJoin(const Table& t1, const Table& t2)
 	}
 
 	return *fusion;
-}
-
-unsigned long Table::getIndex(const string& ref) {
-	for (int i=0; i<attributes.size(); i++) {
-		if (attributes[i].getName() == ref) {
-			return i;
-		}
-	}
-	throw noEntryTable();
 }
 
 int Table::sum(string name)
@@ -299,122 +300,16 @@ Table::boolTree* Table::makeTree(string& cond){
 	return tree;
 }
 
-bool Table::checkEntry(boolTree* conditions, Record* r) {
-	bool ret = false;
-	
-	if (conditions->isBoolean) {
-		bool left = checkEntry(conditions->left, r);
-		bool right = checkEntry(conditions->right, r);
-		if(conditions->value == "&&")
-			ret = left && right;
-		else
-			ret = left || right;
-	}
-	else {
-		unsigned long index = getIndex(conditions->left->value);
-		string left = r->tuples[index];
-		char type = attributes[index].getType();
-		if (conditions->value == "==") {
-			switch (type) {
-				case 's':
-					return left == conditions->right->value;
-					break;
-				case 'i':
-					return atoi(left.c_str()) == atoi(conditions->right->value.c_str());
-					break;
-				case 'f':
-					return atof(left.c_str()) == atof(conditions->right->value.c_str());
-					break;
-				case 'd':
-					return false;
-					break;
-			}
-		}
-		if (conditions->value == "!=") {
-			switch (type) {
-				case 's':
-					return left != conditions->right->value;
-					break;
-				case 'i':
-					return atoi(left.c_str()) != atoi(conditions->right->value.c_str());
-					break;
-				case 'f':
-					return atof(left.c_str()) != atof(conditions->right->value.c_str());
-					break;
-				case 'd':
-					return false;
-					break;
-			}
-		}
-		if (type == 's')
-			throw improperSyntax();
-		if (conditions->value == "<=") {
-			switch (type) {
-				case 'i':
-					return atoi(left.c_str()) <= atoi(conditions->right->value.c_str());
-					break;
-				case 'f':
-					return atof(left.c_str()) <= atof(conditions->right->value.c_str());
-					break;
-				case 'd':
-					return false;
-					break;
-			}
-		}
-		if (conditions->value == "<") {
-			switch (type) {
-				case 'i':
-					return atoi(left.c_str()) < atoi(conditions->right->value.c_str());
-					break;
-				case 'f':
-					return atof(left.c_str()) < atof(conditions->right->value.c_str());
-					break;
-				case 'd':
-					return false;
-					break;
-			}
-		}
-		if (conditions->value == ">=") {
-			switch (type) {
-				case 'i':
-					return atoi(left.c_str()) >= atoi(conditions->right->value.c_str());
-					break;
-				case 'f':
-					return atof(left.c_str()) >= atof(conditions->right->value.c_str());
-					break;
-				case 'd':
-					return false;
-					break;
-			}
-		}
-		if (conditions->value == ">") {
-			switch (type) {
-				case 'i':
-					return atoi(left.c_str()) > atoi(conditions->right->value.c_str());
-					break;
-				case 'f':
-					return atof(left.c_str()) > atof(conditions->right->value.c_str());
-					break;
-				case 'd':
-					return false;
-					break;
-			}
-		}
-	}
-	
-	if (conditions->negated)
-		ret = !ret;
-	
-	return ret;
+bool Table::checkEntry(Record* r) {
+
 }
 
 vector<Record*> Table::checkAgainst(string cond){
 	vector<Record*> ret;
 	boolTree* conditions = makeTree(cond);
 	
-	for(int i = 0; i < records.size(); ++i) {
-		if(checkEntry(conditions, &records[i]))
-			ret.push_back(&records[i]);
+	for(vector<Record>::iterator it = records.begin(); it != records.end(); ++it) {
+		
 	}
 	
 	return ret;

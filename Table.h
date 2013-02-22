@@ -39,10 +39,10 @@ private:
 		boolTree(string value, boolTree* l, boolTree* r): value(value), isBoolean(false), left(l), right(r), negated(false) {}
 	};
 	
+	unsigned long convertDate(char* date);
 	string getToken(string& str);
 	boolTree* makeTree(string& cond);
-	bool checkEntry(boolTree* conditions, Record* r);
-	unsigned long getIndex(const string& ref);
+	bool checkEntry(Record* r);
 	
 public:
 
