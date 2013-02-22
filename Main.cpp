@@ -36,7 +36,7 @@ int main()
 	vector<string> record3;
 	record3.push_back("Matt");
 	record3.push_back("Dillard");
-	record3.push_back("20");
+	record3.push_back("21");
 	record3.push_back("1991/09/20");
 
 	Record person1(record1);
@@ -56,14 +56,15 @@ int main()
 	table.insertRecord(person2);
 	table.insertRecord(person3);
 
-	/*database.addTable(table,"Group14");
+	database.addTable(table,"Group14");
 
 	database.printTable(table);
 	cout << endl << endl;
-	Table* t = database.Query("*","Age>=21","Group14");
+	Table* t = database.Query("*","(Age<21&&DOB<2000/01/01)||Age>20","Group14");
 	database.addTable(*t,"Query");
-	database.printTable(*t);*/
+	database.printTable(*t);
 	
 	//vector<Record*> t = table.checkAgainst("DOB != 2001/09/11 && First == Matt");
+
 	cin >> ch;
 }
