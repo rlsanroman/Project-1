@@ -15,7 +15,7 @@ private:
 	{
 		virtual const char* what() const throw()
 		{
-			return "Improper Query Syntax";
+			return "Improper Syntax";
 		}
 	};
 	
@@ -62,10 +62,10 @@ public:
 
 	void renameAttribute(string oldname, string newname);
 	Table static crossJoin(const Table& t1, const Table& t2);
-	int sum(string name);
+	double sum(string name);
 	unsigned int count(string name);
-	int min (string name);
-	int max (string name);
+	string min (string name);
+	string max (string name);
 	
 	friend class Database;
 };

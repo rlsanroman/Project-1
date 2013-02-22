@@ -92,84 +92,140 @@ unsigned long Table::getIndex(const string& ref) {
 	throw noEntryTable();
 }
 
-int Table::sum(string name)
+double Table::sum(string name)
 {
-	int sum = 0;
-	for (int i=0; i<attributes.size(); i++)
-	{
-		if ( name == attributes[i].getName() )
-		{	
-			for (int j = 0; j<records.size(); j++)
+	unsigned long index = getIndex(name);
+	double sum = 0;
+	switch (attributes[index].getType()) {
+		case 'i':
+			for (int j=1; j<records.size(); j++)
 			{
-				sum += atoi(records[j].getTuple(i).c_str());
+				if (records[j][index] != "")
+				{
+					sum += atoi(records[j][index].c_str());
+				}
 			}
 			return sum;
-		}
+			break;
+		case 'f':
+			for (int j=1; j<records.size(); j++)
+			{
+				if (records[j][index] != "")
+				{
+					sum += atof(records[j][index].c_str());
+				}
+			}
+			return sum;
+			break;
 	}
-	throw noEntryTable();
+	throw improperSyntax();
 }
 
 unsigned int Table::count(string name)
 {
+	unsigned long index = getIndex(name);
 	unsigned int count = 0;
-	for (int i=0; i<attributes.size(); i++)
+	for (int j=0; j<records.size(); j++)
 	{
-		if ( name == attributes[i].getName() )
+		//count only non-empty values
+		if (records[j][index] != "")
 		{
-			for (int j=0; j<records.size(); j++)
-			{
-				//count only non-empty values
-				if (records[j].getTuple(i) != "")	
-				{
-					count++;
-				}
-			}
-			return count;
+			count++;
 		}
 	}
-	throw noEntryTable();
+	return count;
 }
 
-int Table::min (string name) 
+string Table::min (string name)
 {
-	int min = 0;
-	for (int i=0; i<attributes.size(); i++)
-	{
-		if ( name == attributes[i].getName() )
-		{
-			min = atoi(records[i].getTuple(0).c_str());
+	unsigned long index = getIndex(name);
+	unsigned int rindex = 0;
+	double min;
+	switch (attributes[index].getType()) {
+		case 'i':
+			min = atoi(records[index][0].c_str());
 			for (int j=1; j<records.size(); j++)
 			{
-				if (atoi(records[j].getTuple(i).c_str()) < min)
+				if (atoi(records[j][index].c_str()) < min)
 				{
-					min = atoi(records[j].getTuple(i).c_str());
+					min = atoi(records[j][index].c_str());
+					rindex = j;
 				}
 			}
-			return min;
-		}
+			return records[rindex][index];
+			break;
+		case 'f':
+			min = atof(records[index][0].c_str());
+			for (int j=1; j<records.size(); j++)
+			{
+				if (atof(records[j][index].c_str()) < min)
+				{
+					min = atof(records[j][index].c_str());
+					rindex = j;
+				}
+			}
+			return records[rindex][index];
+			break;
+		case 'd':
+			min = convertDate(records[0][index]);
+			for (int j=1; j<records.size(); j++)
+			{
+				if (convertDate(records[j][index]) < min)
+				{
+					min = convertDate(records[j][index]);
+					rindex = j;
+				}
+			}
+			return records[rindex][index];
+			break;
 	}
-	throw noEntryTable();
+	throw improperSyntax();
 }
 
-int Table::max (string name)
+string Table::max (string name)
 {
-	int max = 0;
-	for (int i=0; i<attributes.size(); i++)
-	{
-		if ( name == attributes[i].getName() )
-		{
-			max = atoi(records[i].getTuple(0).c_str());
+	unsigned long index = getIndex(name);
+	unsigned int rindex = 0;
+	double max;
+	switch (attributes[index].getType()) {
+		case 'i':
+			max = atoi(records[index][0].c_str());
 			for (int j=1; j<records.size(); j++)
 			{
-				if (atoi(records[j].getTuple(i).c_str()) > max)
+				if (atoi(records[j][index].c_str()) > max)
 				{
-					max = atoi(records[j].getTuple(i).c_str());
+					max = atoi(records[j][index].c_str());
+					rindex = j;
 				}
 			}
-			return max;
-		}
+			return records[rindex][index];
+			break;
+		case 'f':
+			max = atof(records[index][0].c_str());
+			for (int j=1; j<records.size(); j++)
+			{
+				if (atof(records[j][index].c_str()) > max)
+				{
+					max = atof(records[j][index].c_str());
+					rindex = j;
+				}
+			}
+			return records[rindex][index];
+			break;
+		case 'd':
+			max = convertDate(records[0][index]);
+			for (int j=1; j<records.size(); j++)
+			{
+				if (convertDate(records[j][index]) > max)
+				{
+					max = convertDate(records[j][index]);
+					rindex = j;
+				}
+			}
+			return records[rindex][index];
+			break;
 	}
-	throw noEntryTable();
+	throw improperSyntax();
 }
 
 string Table::getToken(string& str) {
