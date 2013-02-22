@@ -37,9 +37,8 @@ Table* Database::Query(string strSelect, string strWhere, string strFrom)
 	Table table = getTables()[strFrom];
 	Table* newTable = new Table();
 	int selindex;
-	int whereindex;
-	vector<string> operators = parse(strWhere);
-	/* Currently for multiple selects, though requirements do not specify */
+
+	vector<Record*> results = table.checkAgainst(strWhere);
 	if (strSelect == "*")
 	{
 		selindex = -1;	//-1 indicates select ALL
@@ -48,8 +47,12 @@ Table* Database::Query(string strSelect, string strWhere, string strFrom)
 			Attribute att = *new Attribute(strSelect,'s');
 			newTable->addColumn(att);
 		}
+		for (int i=0; i< results.size(); i++)
+		{
+			newTable->insertRecord(*results[i]);
+		}
 	}
-	else //only one select (first element of the strSelect Vector)
+	else 
 	{
 		for (selindex=0; selindex < table.getAttributes().size(); selindex++)
 		{
@@ -60,133 +63,12 @@ Table* Database::Query(string strSelect, string strWhere, string strFrom)
 				break;
 			}
 		}
-	}
-	bool wherefound = false;
-	for(whereindex =0; whereindex < table.getAttributes().size(); whereindex++)
-	{
-		if(table.getAttributes()[whereindex].getName() == operators[0])
+		for (int i=0; i< results.size(); i++)
 		{
-			wherefound = true; // we found the where case
-			break; //we got our where index
+			newTable->insertRecord(*results[selindex]);
 		}
 	}
-	if(!wherefound)
-	{
-		//throw an exception because where does not exist
-	}
-
-	//Checking operations
-	for (int i=0; i<table.getSize(); i++)
-	{
-		if(operators[1] == "<")
-		{
-			if(selindex == -1)
-			{
-				if(atof(table.getRecord(i).getTuple(whereindex).c_str()) < atof(operators[2].c_str()))
-					newTable->insertRecord(table.getRecord(i));
-			}
-			else
-			{
-				if(atof(table.getRecord(i).getTuple(whereindex).c_str()) < atof(operators[2].c_str()))
-				{
-					vector<string> record;
-					record.push_back(table.getRecord(i).getTuple(selindex));
-					Record newrecord = *new Record(record);
-					newTable->insertRecord(newrecord);
-				}
-			}
-		}
-		else if(operators[1] == ">")
-		{
-			if(selindex == -1)
-			{
-				if(atof(table.getRecord(i).getTuple(whereindex).c_str()) > atof(operators[2].c_str()))
-					newTable->insertRecord(table.getRecord(i));
-			}
-			else
-			{
-				if(atof(table.getRecord(i).getTuple(whereindex).c_str()) > atof(operators[2].c_str()))
-				{
-					vector<string> record;
-					record.push_back(table.getRecord(i).getTuple(selindex));
-					Record newrecord = *new Record(record);
-					newTable->insertRecord(newrecord);
-				}
-			}
-		}
-		else if(operators[1] == "=")
-		{
-			if(selindex == -1)
-			{
-				if(atof(table.getRecord(i).getTuple(whereindex).c_str()) == atof(operators[2].c_str()))
-					newTable->insertRecord(table.getRecord(i));
-			}
-			else
-			{
-				if(atof(table.getRecord(i).getTuple(whereindex).c_str()) == atof(operators[2].c_str()))
-				{
-					vector<string> record;
-					record.push_back(table.getRecord(i).getTuple(selindex));
-					Record newrecord = *new Record(record);
-					newTable->insertRecord(newrecord);
-				}
-			}
-		}
-		else if(operators[1] == "<=")
-		{
-			if(selindex == -1)
-			{
-				if(atof(table.getRecord(i).getTuple(whereindex).c_str()) <= atof(operators[2].c_str()))
-					newTable->insertRecord(table.getRecord(i));
-			}
-			else
-			{
-				if(atof(table.getRecord(i).getTuple(whereindex).c_str()) <= atof(operators[2].c_str()))
-				{
-					vector<string> record;
-					record.push_back(table.getRecord(i).getTuple(selindex));
-					Record newrecord = *new Record(record);
-					newTable->insertRecord(newrecord);
-				}
-			}
-		}
-		else if(operators[1] == ">=")
-		{
-			if(selindex == -1)
-			{
-				if(atof(table.getRecord(i).getTuple(whereindex).c_str()) >= atof(operators[2].c_str()))
-					newTable->insertRecord(table.getRecord(i));
-			}
-			else
-			{
-				if(atof(table.getRecord(i).getTuple(whereindex).c_str()) >= atof(operators[2].c_str()))
-				{
-					vector<string> record;
-					record.push_back(table.getRecord(i).getTuple(selindex));
-					Record newrecord = *new Record(record);
-					newTable->insertRecord(newrecord);
-				}
-			}
-		}
-		else if(operators[1] == "!=")
-		{
-			if(selindex == -1)
-			{
-				if(atof(table.getRecord(i).getTuple(whereindex).c_str()) != atof(operators[2].c_str()))
-					newTable->insertRecord(table.getRecord(i));
-			}
-			else
-			{
-				if(atof(table.getRecord(i).getTuple(whereindex).c_str()) != atof(operators[2].c_str()))
-				{
-					vector<string> record;
-					record.push_back(table.getRecord(i).getTuple(selindex));
-					Record newrecord = *new Record(record);
-					newTable->insertRecord(newrecord);
-				}
-			}
-		}
-	}
+	
 
 	return newTable;
 }
