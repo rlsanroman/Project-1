@@ -13,13 +13,14 @@ void Table::addColumn(Attribute att)
 void Table::deleteColumn(string name)
 {
 	bool found = false;
-	for(int i = 0; i < attributes.size(); i++)
+	for(int i = 0; i < attributes.size() && !found; i++)
 	{
 		if( name == attributes[i].getName() )
 		{
 			attributes.erase(attributes.begin() + i);
+			for (vector<Record>::iterator it = records.begin(); it != records.end(); ++it)
+				it->tuples.erase(it->tuples.begin() + i);
 			found = true;
-			break;
 		}
 	}
 	if (!found)
@@ -118,7 +119,7 @@ int Table::min (string name)
 		if ( name == attributes[i].getName() )
 		{
 			min = atoi(records[i].getTuple(0).c_str());
-			for (int j=0; j<records.size(); j++)
+			for (int j=1; j<records.size(); j++)
 			{
 				if (atoi(records[j].getTuple(i).c_str()) < min)
 				{
@@ -139,7 +140,7 @@ int Table::max (string name)
 		if ( name == attributes[i].getName() )
 		{
 			max = atoi(records[i].getTuple(0).c_str());
-			for (int j=0; j<records.size(); j++)
+			for (int j=1; j<records.size(); j++)
 			{
 				if (atoi(records[j].getTuple(i).c_str()) > max)
 				{

@@ -10,6 +10,8 @@ class __declspec(dllexport) Table
 private:
 	vector<Attribute> attributes;
 	vector<Record> records;
+	
+	vector<Record> checkAgainst(const string& cond);
 public:
 
 	class noEntryTable: public exception
@@ -38,7 +40,8 @@ public:
 	unsigned int count(string name);
 	int min (string name);
 	int max (string name);
-
+	
+	friend class Database;
 };
 
 #endif
