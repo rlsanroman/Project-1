@@ -150,7 +150,7 @@ void Database::printTable(Table table)
 	{
 		for(int j = 0; j < table.getAttributes().size(); j++)
 		{
-			cout << table.getRecord(i).getTuple(j) << " ";
+			cout << table.getRecord(i)[j] << " ";
 		}
 		cout << endl;
 	}
